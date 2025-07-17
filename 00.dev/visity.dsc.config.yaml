@@ -1,0 +1,16 @@
+# visity.dsc.dev.yaml
+$schema: https://aka.ms/dsc/schemas/v3/bundled/config/document.vscode.json
+
+parameters:
+    exampleString:
+      type: string
+      defaultValue: "default value"
+    exampleInt:
+      type: int
+      defaultValue: 123
+
+resources:
+  - name: Visity
+    type: Microsoft.DSC/Include
+    properties:
+      path: ./visity.dsc.config.yaml

@@ -1,0 +1,153 @@
+# visity.dsc.config.yaml
+$schema: https://aka.ms/dsc/schemas/v3/bundled/config/document.vscode.json
+
+resources:
+  - name: WindowsFeature
+    type: Microsoft.DSC/Include
+    properties:
+      path: ./.resources/windows/feature.dsc.resource.yaml
+  
+  - name: Visity
+    type: Microsoft.Windows/WindowsPowerShell
+    properties:
+      resources:
+        # - name: Feature.Hyper-V
+        #   type: PSDesiredStateConfiguration/WindowsFeature
+        #   properties:
+        #     Name: Hyper-V
+        #     Ensure: Present 
+
+        - name: Visity DC1 Vhdx
+          type: HyperVDsc/Vhd
+          properties:
+            Name: Visity.DC1.vhdx
+            Path: D:\Users\Public\Hyper-V\Virtual Hard Disks
+            Generation: Vhdx
+            Type: Dynamic
+            MaximumSizeBytes: 85899345920
+            Ensure: Present
+
+        - name: Visity DC1
+          type: HyperVDsc/VMHyperV
+          properties:
+            Name: Visity DC1
+            VhdPath: D:\Users\Public\Hyper-V\Virtual Hard Disks\Visity.DC1.vhdx
+            Generation: 2
+            dependsOn:
+              - HyperVDsc/Vhd:Visity DC1 Vhdx 
+            Ensure: Present 
+
+        - name: Visity DC2 Vhdx
+          type: HyperVDsc/Vhd
+          properties:
+            Name: Visity.DC2.vhdx
+            Path: D:\Users\Public\Hyper-V\Virtual Hard Disks
+            Generation: Vhdx
+            Type: Dynamic
+            MaximumSizeBytes: 85899345920
+            Ensure: Present
+
+        - name: Visity DC2
+          type: HyperVDsc/VMHyperV
+          properties:
+            Name: Visity DC2
+            VhdPath: D:\Users\Public\Hyper-V\Virtual Hard Disks\Visity.DC2.vhdx
+            Generation: 2
+            dependsOn:
+              - HyperVDsc/VMHyperV:Visity DC1
+              - HyperVDsc/Vhd:Visity DC2 Vhdx 
+            Ensure: Present 
+
+  # - name: Storage 1
+  #   type: type: Microsoft.Windows/WindowsPowerShell
+  #   operatingSystem: Windows Server
+  #   features: [File Server]
+  #   software: {
+  #     'PowerShell'
+  #   }
+  #   dependsOn:
+  #     - "[resourceId('type: Microsoft.Windows/WindowsPowerShell', 'DC 1')]"
+
+  # - name: Storage 2 
+  #   type: type: Microsoft.Windows/WindowsPowerShell
+  #   operatingSystem: Windows Server
+  #   features: [File Server]
+  #   software: {
+  #     'PowerShell'
+  #   }
+  #   dependsOn:
+  #     - "[resourceId('type: Microsoft.Windows/WindowsPowerShell', 'DC 1')]"
+
+  # - name: Admin
+  #   type: type: Microsoft.Windows/WindowsPowerShell
+  #   operatingSystem: Windows Client
+  #   software: {
+  #     'GIT',
+  #     'PowerShell': [GIT-POSH],
+  #     'Windows Terminal',
+  #     'SQL Server Management Studio',
+  #     'SQL Data Services',
+  #     'Visual Studio Code': [PowerShell, GIT, YAML, JSON]
+  #   }
+  #   dependsOn:
+  #     - "[resourceId('type: Microsoft.Windows/WindowsPowerShell', 'Storage 1')]"
+
+  # - name: MS SQL Read and Write
+  #   type: type: Microsoft.Windows/WindowsPowerShell
+  #   operatingSystem: Alma Linux
+  #   software: {
+  #     'PowerShell',
+  #     'MS SQL': [Engine]
+  #   }
+  #   dependsOn:
+  #     - "[resourceId('type: Microsoft.Windows/WindowsPowerShell', 'Storage 1')]"
+
+  # - name: MS SQL Read Only
+  #   type: type: Microsoft.Windows/WindowsPowerShell
+  #   operatingSystem: Alma Linux
+  #   software: {
+  #     'PowerShell',
+  #     'MS SQL': [Engine]
+  #   }
+  #   dependsOn:
+  #     - "[resourceId('type: Microsoft.Windows/WindowsPowerShell', 'MS SQL Read and Write')]"
+
+  # - name: DotNet App 1
+  #   type: type: Microsoft.Windows/WindowsPowerShell
+  #   operatingSystem: Alma Linux
+  #   software: {
+  #     'PowerShell',
+  #     '.NET'
+  #   }
+  #   dependsOn:
+  #     - "[resourceId('type: Microsoft.Windows/WindowsPowerShell', 'MS SQL Read and Write')]"
+
+  # - name: DotNet App 2
+  #   type: type: Microsoft.Windows/WindowsPowerShell
+  #   operatingSystem: Alma Linux
+  #   software: {
+  #     'PowerShell',
+  #     '.NET'
+  #   }
+  #   dependsOn:
+  #     - "[resourceId('type: Microsoft.Windows/WindowsPowerShell', 'DotNet App 1')]"
+
+  # - name: Proxy 1
+  #   type: type: Microsoft.Windows/WindowsPowerShell
+  #   operatingSystem: Alma Linux
+  #   software: {
+  #     'PowerShell',
+  #     'NGINX'
+  #   }
+  #   dependsOn:
+  #     - "[resourceId('type: Microsoft.Windows/WindowsPowerShell', 'DC 1')]"
+
+  # - name: Proxy 2
+  #   type: type: Microsoft.Windows/WindowsPowerShell
+  #   operatingSystem: Alma Linux
+  #   software: {
+  #     'PowerShell',
+  #     'NGINX'
+  #   }
+  #   dependsOn:
+  #     - "[resourceId('type: Microsoft.Windows/WindowsPowerShell', 'DC 1')]"

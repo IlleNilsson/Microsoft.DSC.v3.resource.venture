@@ -1,0 +1,85 @@
+# feature.dsc.resource.yaml
+$schema: https://aka.ms/dsc/schemas/v3/bundled/resource/manifest.vscode.json
+kind: resource
+type: Visity.DSC.Windows/Feature
+description: Windows OS Edition agnostic feature handling (WindowsFeature for Server & WindowsOptionalFeature for Clients)
+version: 0.1.0
+tags:
+  - os
+  - windows
+  - client
+  - server
+  - agnostic
+  - feature
+  - optional
+
+get:  
+  executable: pwsh
+  args:
+    - -NoLogo
+    - -NonInteractive
+    - -NoProfile
+    - -NoProfileLoadTime
+    - -CommandWithArgs
+    - |
+      $vars = Get-Variable
+
+      $vars
+
+      return ($vars | ConvertTo-Json -Compress)
+  input: stdin
+
+test:
+  executable: pwsh
+  return: state
+
+set:
+  executable: pwsh
+  args:
+    - -NoLogo
+    - -NonInteractive
+    - -NoProfile
+    - -Command
+    - |
+      $vars = Get-Variable
+
+      $vars
+
+      return ($vars | ConvertTo-Json -Compress)
+  implementsPretest: false
+  input: stdin
+  return: state
+
+exitCodes:
+  0: Success
+  1: Failure
+
+schema:
+  embedded:
+    $schema: https://json-schema.org/draft/2020-12/schema
+    type: object
+
+    properties:
+      Name:
+        title: Feature Name
+        description: The name of the Windows Feature
+        type: string
+          # $ref: #/definitions/nonEmptyString
+      Ensure:
+        title: Feature Enabled or Disabled
+        description: Desired Windows Feature state, Enabled (Present) or Disabled (Absent)
+        type: string
+          # $ref: #/definitions/ensure
+
+    # required:
+    #   - Name
+    #   - Ensure
+
+    # definitions:
+    #   ensure:
+    #     enum:
+    #       - Absent
+    #       - Present
+    #   nonEmptyString:
+    #     type: string
+    #     minLength: 1
