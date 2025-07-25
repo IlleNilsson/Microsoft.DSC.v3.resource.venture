@@ -1,9 +1,8 @@
 # feature.dsc.resource.yaml
 $schema: https://aka.ms/dsc/schemas/v3/bundled/resource/manifest.vscode.json
-kind: resource
+version: 0.1.0
 type: Visity.DSC.Windows/Feature
 description: Windows OS Edition agnostic feature handling (WindowsFeature for Server & WindowsOptionalFeature for Clients)
-version: 0.1.0
 tags:
   - os
   - windows
@@ -13,7 +12,7 @@ tags:
   - feature
   - optional
 
-get:  
+get:
   executable: pwsh
   args:
     - -NoLogo
@@ -26,11 +25,25 @@ get:
 
       $vars
 
-      return ($vars | ConvertTo-Json -Compress)
+      return $vars | ConvertTo-Json
   input: stdin
+  return: state
 
 test:
   executable: pwsh
+  args:
+    - -NoLogo
+    - -NonInteractive
+    - -NoProfile
+    - -NoProfileLoadTime
+    - -CommandWithArgs
+    - |
+      $vars = Get-Variable
+
+      $vars
+
+      return $vars | ConvertTo-Json
+  input: stdin
   return: state
 
 set:
@@ -45,41 +58,43 @@ set:
 
       $vars
 
-      return ($vars | ConvertTo-Json -Compress)
-  implementsPretest: false
+      return $vars | ConvertTo-Json
+  implementsPretest: true
   input: stdin
   return: state
 
-exitCodes:
-  0: Success
-  1: Failure
+  exitCodes:
+    0: Success
+    1: Failure
 
-schema:
-  embedded:
-    $schema: https://json-schema.org/draft/2020-12/schema
-    type: object
+  schema:
+    embedded:
+      $schema: https://json-schema.org/draft/2020-12/schema
+      title: Windows Feature's status
+      description: Returns information about a Windows Feature's status, is it Enabled or Disabled
+      type: object
 
-    properties:
-      Name:
-        title: Feature Name
-        description: The name of the Windows Feature
-        type: string
-          # $ref: #/definitions/nonEmptyString
-      Ensure:
-        title: Feature Enabled or Disabled
-        description: Desired Windows Feature state, Enabled (Present) or Disabled (Absent)
-        type: string
-          # $ref: #/definitions/ensure
+      properties:
+        Name:
+          title: Feature Name
+          description: The name of the Windows Feature
+          type:
+            $ref: #/definitions/nonEmptyString
+        Ensure:
+          title: Feature Enabled or Disabled
+          description: Desired Windows Feature state, Enabled (Present) or Disabled (Absent)
+          type:
+            $ref: #/definitions/ensure
 
-    # required:
-    #   - Name
-    #   - Ensure
+      definitions:
+        ensure:
+          enum:
+            - Absent
+            - Present
+        nonEmptyString:
+          type: string
+          minLength: 1
 
-    # definitions:
-    #   ensure:
-    #     enum:
-    #       - Absent
-    #       - Present
-    #   nonEmptyString:
-    #     type: string
-    #     minLength: 1
+      required:
+        - Name
+        - Ensure
