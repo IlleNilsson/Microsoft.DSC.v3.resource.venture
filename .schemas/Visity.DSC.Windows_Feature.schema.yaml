@@ -1,0 +1,31 @@
+$id: file://visity.dsc.windows/feature
+$schema: https://json-schema.org/draft/2020-12/schema
+type: object
+title: Windows Feature's status
+description: Returns information about a Windows Feature's status, is it Enabled or Disabled
+
+properties:
+  name:
+    type: 
+      $ref: "#/$defs/nonEmptyString"
+    title: Feature Name
+    description: The name of the Windows Feature
+  ensure:
+    type: 
+      $ref: "#/$defs/ensure"
+    title: Feature Enabled or Disabled
+    description: Desired Windows Feature state, Enabled or Disabled
+
+$defs:
+  nonEmptyString:
+    type: string
+    minLength: 1
+  ensure:
+    type: string
+    enum:
+      - enabled
+      - disabled
+
+required:
+  - name
+  - ensure

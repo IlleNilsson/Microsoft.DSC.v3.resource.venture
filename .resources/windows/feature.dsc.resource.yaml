@@ -1,7 +1,8 @@
 # feature.dsc.resource.yaml
-$schema: https://aka.ms/dsc/schemas/v3/bundled/resource/manifest.vscode.json
+$schema:  https://aka.ms/dsc/schemas/v3/bundled/resource/manifest.vscode.json
 version: 0.1.0
 type: Visity.DSC.Windows/Feature
+kind: resource
 description: Windows OS Edition agnostic feature handling (WindowsFeature for Server & WindowsOptionalFeature for Clients)
 tags:
   - os
@@ -21,11 +22,18 @@ get:
     - -NoProfileLoadTime
     - -CommandWithArgs
     - |
-      $vars = Get-Variable
+      $computerType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
+      $feature = $null
+      switch ($computerType) {
+          1       { $feature = Get-WindowsOptionalFeature -Online -FeatureName $name }
+          default { $feature = Get-WindowsFeature -Name $name }  
+      }
 
-      $vars
+      if (!$feature) { 
+          throw New-Object ArgumentException "Feature '$name' not found"
+      }
 
-      return $vars | ConvertTo-Json
+      return $feature | ConvertTo-Yaml
   input: stdin
   return: state
 
@@ -52,7 +60,8 @@ set:
     - -NoLogo
     - -NonInteractive
     - -NoProfile
-    - -Command
+    - -NoProfileLoadTime
+    - -CommandWithArgs
     - |
       $vars = Get-Variable
 
@@ -63,38 +72,6 @@ set:
   input: stdin
   return: state
 
-  exitCodes:
-    0: Success
-    1: Failure
-
-  schema:
-    embedded:
-      $schema: https://json-schema.org/draft/2020-12/schema
-      title: Windows Feature's status
-      description: Returns information about a Windows Feature's status, is it Enabled or Disabled
-      type: object
-
-      properties:
-        Name:
-          title: Feature Name
-          description: The name of the Windows Feature
-          type:
-            $ref: #/definitions/nonEmptyString
-        Ensure:
-          title: Feature Enabled or Disabled
-          description: Desired Windows Feature state, Enabled (Present) or Disabled (Absent)
-          type:
-            $ref: #/definitions/ensure
-
-      definitions:
-        ensure:
-          enum:
-            - Absent
-            - Present
-        nonEmptyString:
-          type: string
-          minLength: 1
-
-      required:
-        - Name
-        - Ensure
+exitCodes:
+  0: Success
+  1: Failure

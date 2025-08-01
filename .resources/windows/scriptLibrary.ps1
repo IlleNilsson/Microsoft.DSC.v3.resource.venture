@@ -3,18 +3,18 @@ $computerType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
 $feature = $null
 switch ($computerType) {
     1 { 
-        $feature = Get-WindowsOptionalFeature -Online -FeatureName $FeatureName 
+        $feature = Get-WindowsOptionalFeature -Online -FeatureName $Name 
     }
     default {
-        $feature = Get-WindowsFeature -Name $FeatureName
+        $feature = Get-WindowsFeature -Name $Name
     }  
 }
 
 if (!$feature) { 
-    throw New-Object ArgumentException "Feature '$FeatureName' not found"
+    throw New-Object ArgumentException "Feature '$Name' not found"
 }
 
-return ($feature | ConvertTo-Json -Compress)
+return $feature | ConvertTo-Yaml
 
 # Test Feature
 $computerType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
