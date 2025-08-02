@@ -22,9 +22,9 @@ get:
     - -NoProfileLoadTime
     - -CommandWithArgs
     - |
-      $computerType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
+      $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
       $feature = $null
-      switch ($computerType) {
+      switch ($osType) {
           1       { $feature = Get-WindowsOptionalFeature -Online -FeatureName $name }
           default { $feature = Get-WindowsFeature -Name $name }  
       }

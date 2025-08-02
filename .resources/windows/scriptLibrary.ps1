@@ -1,7 +1,7 @@
 # Get Feature State
-$computerType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
+$osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
 $feature = $null
-switch ($computerType) {
+switch ($osType) {
     1 { 
         $feature = Get-WindowsOptionalFeature -Online -FeatureName $Name 
     }
@@ -17,8 +17,8 @@ if (!$feature) {
 return $feature | ConvertTo-Yaml
 
 # Test Feature
-$computerType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
-switch ($computerType) {
+$osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
+switch ($osType) {
     1 { 
     }
     default {
@@ -26,8 +26,8 @@ switch ($computerType) {
 }
 
 # Set Feature
-$computerType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
-switch ($computerType) {
+$osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
+switch ($osType) {
     1 { 
     }
     default {
