@@ -28,12 +28,12 @@ get:
 
       $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
       $feature = switch ($osType) {
-          1       { Get-WindowsOptionalFeature -Online -FeatureName $name }
-          default { Get-WindowsFeature -Name $name }  
+          1       { Get-WindowsOptionalFeature -Online -FeatureName $args['name'] }
+          default { Get-WindowsFeature -Name $args['name'] }  
       }
 
       if (!$feature) { 
-          throw New-Object ArgumentException "Feature '$name' not found"
+          throw New-Object ArgumentException "Feature '$($args['name'])' not found"
       }
 
       return $feature | ConvertTo-Yaml
@@ -53,11 +53,21 @@ test:
       #Requires -PSEdition Core
       #Requires -RunAsAdministrator
 
-      $vars = Get-Variable
+      #Requires -Version 7.5
+      #Requires -PSEdition Core
+      #Requires -RunAsAdministrator
 
-      $vars
+      $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
+      $feature = switch ($osType) {
+          1       { Get-WindowsOptionalFeature -Online -FeatureName $args['name'] }
+          default { Get-WindowsFeature -Name $args['name'] }  
+      }
 
-      return $vars | ConvertTo-Json
+      if (!$feature) { 
+          throw New-Object ArgumentException "Feature '$($args['name'])' not found"
+      }
+
+      return $feature | ConvertTo-Yaml
   input: stdin
   return: state
 
@@ -74,11 +84,21 @@ set:
       #Requires -PSEdition Core
       #Requires -RunAsAdministrator
 
-      $vars = Get-Variable
+      #Requires -Version 7.5
+      #Requires -PSEdition Core
+      #Requires -RunAsAdministrator
 
-      $vars
+      $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
+      $feature = switch ($osType) {
+          1       { Enable-WindowsOptionalFeature -Online -FeatureName $args['name'] }
+          default { Enable-WindowsFeature -Name $args['name'] }  
+      }
 
-      return $vars | ConvertTo-Json
+      if (!$feature) { 
+          throw New-Object ArgumentException "Feature '$($args['name'])' not found"
+      }
+
+      return $feature | ConvertTo-Yaml
   implementsPretest: false
   input: stdin
   return: state
