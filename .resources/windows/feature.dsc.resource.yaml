@@ -108,8 +108,8 @@ schema:
     title: Windows Feature's status
     description: Returns information about a Windows Feature's status, is it Enabled or Disabled
 
-    properties:
-      get:
+    get:
+      properties:
         name:
           type: 
             $ref: "#/$defs/nonEmptyString"
@@ -118,20 +118,22 @@ schema:
             $ref: "#/$defs/ensure"
 
       test:
-        name:
-          type: 
-            $ref: "#/$defs/nonEmptyString"
-        ensure:
-          type: 
-            $ref: "#/$defs/ensure"
+        properties:
+          name:
+            type: 
+              $ref: "#/$defs/nonEmptyString"
+          ensure:
+            type: 
+              $ref: "#/$defs/ensure"
 
       set:
-        name:
-          type: 
-            $ref: "#/$defs/nonEmptyString"
-        ensure:
-          type: 
-            $ref: "#/$defs/ensure"
+        properties:
+          name:
+            type: 
+              $ref: "#/$defs/nonEmptyString"
+          ensure:
+            type: 
+              $ref: "#/$defs/ensure"
 
     $defs:
       nonEmptyString:
