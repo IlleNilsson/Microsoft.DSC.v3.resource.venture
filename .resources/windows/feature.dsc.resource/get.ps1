@@ -5,10 +5,9 @@
 #Requires -RunAsAdministrator
 
 $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
-$feature = $null
-switch ($osType) {
-    1       { $feature = Get-WindowsOptionalFeature -Online -FeatureName $name }
-    default { $feature = Get-WindowsFeature -Name $name }  
+$feature = switch ($osType) {
+    1       { Get-WindowsOptionalFeature -Online -FeatureName $name }
+    default { Get-WindowsFeature -Name $name }  
 }
 
 if (!$feature) { 
