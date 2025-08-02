@@ -22,6 +22,10 @@ get:
     - -NoProfileLoadTime
     - -CommandWithArgs
     - |
+      #Requires -Version 7.5
+      #Requires -PSEdition Core
+      #Requires -RunAsAdministrator
+
       $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
       $feature = $null
       switch ($osType) {
@@ -46,6 +50,10 @@ test:
     - -NoProfileLoadTime
     - -CommandWithArgs
     - |
+      #Requires -Version 7.5
+      #Requires -PSEdition Core
+      #Requires -RunAsAdministrator
+
       $vars = Get-Variable
 
       $vars
@@ -63,6 +71,10 @@ set:
     - -NoProfileLoadTime
     - -CommandWithArgs
     - |
+      #Requires -Version 7.5
+      #Requires -PSEdition Core
+      #Requires -RunAsAdministrator
+
       $vars = Get-Variable
 
       $vars
