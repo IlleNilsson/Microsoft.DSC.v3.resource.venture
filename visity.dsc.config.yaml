@@ -5,8 +5,7 @@ resources:
   - name: HyperV Feature
     type: Microsoft.DSC/Include
     properties:
-      resources: Visity.DSC.Windows/Feature
-      path: ./.resources/windows/visity.dsc.config.yaml       
+      path: ./.resources/windows/feature.dsc.resource.yaml       
       name: Microsoft-Hyper-V
       ensure: enabled 
   
@@ -22,6 +21,8 @@ resources:
             Generation: Vhdx
             Type: Dynamic
             MaximumSizeBytes: 85899345920
+            dependsOn:
+              - Visity.DSC.Windows/Feature:HyperV Feature 
             Ensure: Present
 
         - name: Visity DC1
