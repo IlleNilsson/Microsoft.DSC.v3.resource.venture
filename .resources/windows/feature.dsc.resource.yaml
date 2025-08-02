@@ -92,26 +92,43 @@ schema:
     description: Returns information about a Windows Feature's status, is it Enabled or Disabled
 
     properties:
-      name:
-        type: 
-          $ref: "#/$defs/nonEmptyString"
-        title: Feature Name
-        description: The name of the Windows Feature
-      ensure:
-        type: 
-          $ref: "#/$defs/ensure"
-        title: Feature Enabled or Disabled
-        description: Desired Windows Feature state, Enabled or Disabled
+      get:
+        name:
+          type: 
+            $ref: "#/$defs/nonEmptyString"
+        ensure:
+          type: 
+            $ref: "#/$defs/ensure"
+
+      test:
+        name:
+          type: 
+            $ref: "#/$defs/nonEmptyString"
+        ensure:
+          type: 
+            $ref: "#/$defs/ensure"
+
+      set:
+        name:
+          type: 
+            $ref: "#/$defs/nonEmptyString"
+        ensure:
+          type: 
+            $ref: "#/$defs/ensure"
 
     $defs:
       nonEmptyString:
         type: string
         minLength: 1
+        title: Feature Name
+        description: The name of the Windows Feature
       ensure:
         type: string
         enum:
           - enabled
           - disabled
+        title: Feature Enabled or Disabled
+        description: Desired Windows Feature state, Enabled or Disabled
 
     required:
       - name
