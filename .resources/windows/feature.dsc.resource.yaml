@@ -109,7 +109,7 @@ set:
           }
           'disabled' { 
               switch ($osType) {
-                  1       { Disable-WindowsOptionalFeature -Online FeatureName $args['name'] -EA Silent }
+                  1       { Disable-WindowsOptionalFeature -Online -FeatureName $args['name'] -EA Silent }
                   default { Disable-WindowsFeature -Name $args['name'] -EA Silent }  
               }
           }
