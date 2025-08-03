@@ -7,7 +7,7 @@ description: Returns information about a Windows Feature's status, is it Enabled
 properties:
   name:
     type: 
-      $ref: "#/$defs/featureName"
+      $ref: "#/$defs/name"
     title: Feature Name
     description: The name of the Windows Feature
   ensure:
@@ -17,7 +17,7 @@ properties:
     description: Desired Windows Feature state, Enabled or Disabled
 
 $defs:
-  featureName:
+  name:
     type: string
     minLength: 1
   ensure:

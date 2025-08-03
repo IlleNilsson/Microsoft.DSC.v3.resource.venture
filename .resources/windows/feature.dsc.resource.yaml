@@ -109,7 +109,7 @@ set:
           }
           'disabled' { 
               switch ($osType) {
-                  1       { Disable-WindowsOptionalFeature -Online -FeatureName $args['name'] -EA Silent }
+                  1       { Disable-WindowsOptionalFeature -Online FeatureName $args['name'] -EA Silent }
                   default { Disable-WindowsFeature -Name $args['name'] -EA Silent }  
               }
           }
@@ -141,7 +141,7 @@ schema:
         properties:
           name:
             type: 
-              $ref: "#/$defs/featureName"
+              $ref: "#/$defs/name"
         required:
           - name
 
@@ -149,7 +149,7 @@ schema:
         properties:
           name:
             type: 
-              $ref: "#/$defs/featureName"
+              $ref: "#/$defs/name"
           ensure:
             type: 
               $ref: "#/$defs/ensure"
@@ -162,7 +162,7 @@ schema:
         properties:
           name:
             type: 
-              $ref: "#/$defs/featureName"
+              $ref: "#/$defs/name"
           ensure:
             type: 
               $ref: "#/$defs/ensure"
@@ -172,7 +172,7 @@ schema:
             - ensure
 
     $defs:
-      featureName:
+      name:
         type: string
         minLength: 1
         title: Feature Name
