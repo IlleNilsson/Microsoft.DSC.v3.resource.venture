@@ -142,6 +142,8 @@ schema:
           name:
             type: 
               $ref: "#/$defs/nonEmptyString"
+        required:
+          - name
 
       test:      
         properties:
@@ -151,6 +153,10 @@ schema:
           ensure:
             type: 
               $ref: "#/$defs/ensure"
+          
+          required:
+            - name
+            - ensure
 
       set:      
         properties:
@@ -160,6 +166,10 @@ schema:
           ensure:
             type: 
               $ref: "#/$defs/ensure"
+
+          required:
+            - name
+            - ensure
 
     $defs:
       nonEmptyString:
@@ -174,10 +184,6 @@ schema:
           - disabled
         title: Feature Enabled or Disabled
         description: Desired Windows Feature state, Enabled or Disabled
-
-    required:
-      - name
-      - ensure
       
 exitCodes:
   0: success
