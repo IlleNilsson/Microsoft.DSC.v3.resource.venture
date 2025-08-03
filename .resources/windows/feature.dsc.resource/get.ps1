@@ -4,7 +4,7 @@
 
 $platform = [System.Environment]::OSVersion.Platform
 $supportedPlatforms = @('Win32NT')
-if (!($supportedPlatforms -contains 'Win32NT')) {
+if (!($supportedPlatforms -contains $platform)) {
     throw New-Object ArgumentException "Unsupoorted Platform: $platform, supported platforms: $supportedPlatforms"    
 }
 
