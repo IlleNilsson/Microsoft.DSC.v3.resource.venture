@@ -3,7 +3,7 @@
 #Requires -RunAsAdministrator
 
 $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
-$feature = if ($($args['ensure']) -eq 'enabled') {
+$feature = if ($args['ensure'] -eq 'enabled') {
     switch ($osType) {
         1       { Enable-WindowsOptionalFeature -Online -FeatureName $args['name'] -EA Silent }
         default { Enable-WindowsFeature -Name $args['name'] -EA Silent }
