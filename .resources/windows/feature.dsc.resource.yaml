@@ -142,9 +142,6 @@ schema:
           name:
             type: 
               $ref: "#/$defs/nonEmptyString"
-          ensure:
-            type: 
-              $ref: "#/$defs/ensure"
 
       test:      
         properties:
