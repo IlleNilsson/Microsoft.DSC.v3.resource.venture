@@ -26,6 +26,12 @@ get:
       #Requires -PSEdition Core
       #Requires -RunAsAdministrator
 
+      $platform = [System.Environment]::OSVersion.Platform
+      $supportedPlatforms = @('Win32NT')
+      if (!($supportedPlatforms -contains 'Win32NT')) {
+          throw New-Object ArgumentException "Unsupoorted Platform: $platform, supported platforms: $supportedPlatforms"    
+      }
+
       $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
       $feature = switch ($osType) {
           1       { Get-WindowsOptionalFeature -Online -FeatureName $args['name'] }
@@ -52,6 +58,12 @@ test:
       #Requires -Version 7.5
       #Requires -PSEdition Core
       #Requires -RunAsAdministrator
+
+      $platform = [System.Environment]::OSVersion.Platform
+      $supportedPlatforms = @('Win32NT')
+      if (!($supportedPlatforms -contains 'Win32NT')) {
+          throw New-Object ArgumentException "Unsupoorted Platform: $platform, supported platforms: $supportedPlatforms"    
+      }
 
       $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
       $feature = switch ($osType) {
@@ -80,19 +92,33 @@ set:
       #Requires -PSEdition Core
       #Requires -RunAsAdministrator
 
+      $platform = [System.Environment]::OSVersion.Platform
+      $supportedPlatforms = @('Win32NT')
+      if (!($supportedPlatforms -contains 'Win32NT')) {
+          throw New-Object ArgumentException "Unsupoorted Platform: $platform, supported platforms: $supportedPlatforms"    
+      }
+
       $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
-      $feature = if ($args['ensure'] -eq 'enabled') {
-          switch ($osType) {
-              1       { Enable-WindowsOptionalFeature -Online -FeatureName $args['name'] -EA Silent }
-              default { Enable-WindowsFeature -Name $args['name'] -EA Silent }
-          }} else { 
+      $feature = switch ($args['ensure']) {
+          'enabled' {
               switch ($osType) {
-              1       { Disable-WindowsOptionalFeature -Online -FeatureName $args['name'] -EA Silent }
-              default { Disable-WindowsFeature -Name $args['name'] -EA Silent }  
-          }}
+                  1       { Enable-WindowsOptionalFeature -Online -FeatureName $args['name'] -EA Silent }
+                  default { Enable-WindowsFeature -Name $args['name'] -EA Silent }
+              }
+          }
+          'disabled' { 
+              switch ($osType) {
+                  1       { Disable-WindowsOptionalFeature -Online -FeatureName $args['name'] -EA Silent }
+                  default { Disable-WindowsFeature -Name $args['name'] -EA Silent }  
+              }
+          }
+          default {
+              throw New-Object ArgumentException "Ensure value '$($args['ensure'])' is not supported"    
+          }
+      }
 
       if (!$feature) { 
-          throw New-Object ArgumentException "Feature '$($args['name'])' not found"
+          throw New-Object ArgumentException "Feature '$($args['name'])' not found on OS Type: $osType"
       }
 
       return $feature | ConvertTo-Yaml
@@ -155,5 +181,5 @@ schema:
       - ensure
       
 exitCodes:
-  0: Success
-  1: Failure
+  0: success
+  1: failure

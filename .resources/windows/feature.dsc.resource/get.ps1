@@ -2,6 +2,12 @@
 #Requires -PSEdition Core
 #Requires -RunAsAdministrator
 
+$platform = [System.Environment]::OSVersion.Platform
+$supportedPlatforms = @('Win32NT')
+if (!($supportedPlatforms -contains 'Win32NT')) {
+    throw New-Object ArgumentException "Unsupoorted Platform: $platform, supported platforms: $supportedPlatforms"    
+}
+
 $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
 $feature = switch ($osType) {
     1       { Get-WindowsOptionalFeature -Online -FeatureName $args['name'] }
