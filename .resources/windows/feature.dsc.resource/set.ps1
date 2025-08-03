@@ -28,7 +28,7 @@ $feature = switch ($args['ensure']) {
 }
 
 if (!$feature) { 
-    throw New-Object ArgumentException "Feature '$($args['name'])' not found on OS Type: $osType"
+    throw New-Object ArgumentException "Feature '$($args['name'])' not found on Windows OS Type: $osType"
 }
 
 return $feature | ConvertTo-Yaml

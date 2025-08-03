@@ -15,7 +15,7 @@ $feature = switch ($osType) {
 }
 
 if (!$feature) { 
-    throw New-Object ArgumentException "Feature '$($args['name'])' not found"
+    throw New-Object ArgumentException "Feature '$($args['name'])' not found on Windows OS Type: $osType"
 }
 
 return $feature | ConvertTo-Yaml
