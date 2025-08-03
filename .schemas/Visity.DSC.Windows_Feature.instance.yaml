@@ -1,4 +1,4 @@
 # $schema: file://visity.dsc.windows/feature
 properties:
-  name: Hyper-V
-  ensure: PresentX
+  name:
+  ensure: enabledX
