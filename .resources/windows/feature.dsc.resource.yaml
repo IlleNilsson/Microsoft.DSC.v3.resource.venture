@@ -1,4 +1,3 @@
-# feature.dsc.resource.yaml
 $schema:  https://aka.ms/dsc/schemas/v3/bundled/resource/manifest.vscode.json
 version: 0.1.0
 type: Visity.DSC.Windows/Feature
@@ -29,7 +28,7 @@ get:
       $platform = [System.Environment]::OSVersion.Platform
       $supportedPlatforms = @('Win32NT')
       if (!($supportedPlatforms -contains $platform)) {
-          throw New-Object ArgumentException "Unsupoorted Platform: $platform, supported platforms: $supportedPlatforms"    
+          throw New-Object ArgumentException "Unsupported Platform: $platform, supported platforms: $supportedPlatforms"    
       }
 
       $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
@@ -63,7 +62,7 @@ test:
       $platform = [System.Environment]::OSVersion.Platform
       $supportedPlatforms = @('Win32NT')
       if (!($supportedPlatforms -contains $platform)) {
-          throw New-Object ArgumentException "Unsupoorted Platform: $platform, supported platforms: $supportedPlatforms"    
+          throw New-Object ArgumentException "Unsupported Platform: $platform, supported platforms: $supportedPlatforms"    
       }
 
       $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
@@ -97,7 +96,7 @@ set:
       $platform = [System.Environment]::OSVersion.Platform
       $supportedPlatforms = @('Win32NT')
       if (!($supportedPlatforms -contains $platform)) {
-          throw New-Object ArgumentException "Unsupoorted Platform: $platform, supported platforms: $supportedPlatforms"    
+          throw New-Object ArgumentException "Unsupported Platform: $platform, supported platforms: $supportedPlatforms"    
       }
 
       $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType

@@ -5,7 +5,7 @@
 $platform = [System.Environment]::OSVersion.Platform
 $supportedPlatforms = @('Win32NT')
 if (!($supportedPlatforms -contains $platform)) {
-    throw New-Object ArgumentException "Unsupoorted Platform: $platform, supported platforms: $supportedPlatforms"    
+    throw New-Object ArgumentException "Unsupported Platform: $platform, supported platforms: $supportedPlatforms"    
 }
 
 $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType

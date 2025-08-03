@@ -1,4 +1,3 @@
-# visity.dsc.config.yaml
 $schema: https://aka.ms/dsc/schemas/v3/bundled/config/document.vscode.json
 
 resources:
