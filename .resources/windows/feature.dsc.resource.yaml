@@ -141,7 +141,7 @@ schema:
         properties:
           name:
             type: 
-              $ref: "#/$defs/nonEmptyString"
+              $ref: "#/$defs/featureName"
         required:
           - name
 
@@ -149,7 +149,7 @@ schema:
         properties:
           name:
             type: 
-              $ref: "#/$defs/nonEmptyString"
+              $ref: "#/$defs/featureName"
           ensure:
             type: 
               $ref: "#/$defs/ensure"
@@ -162,7 +162,7 @@ schema:
         properties:
           name:
             type: 
-              $ref: "#/$defs/nonEmptyString"
+              $ref: "#/$defs/featureName"
           ensure:
             type: 
               $ref: "#/$defs/ensure"
@@ -172,7 +172,7 @@ schema:
             - ensure
 
     $defs:
-      nonEmptyString:
+      featureName:
         type: string
         minLength: 1
         title: Feature Name
