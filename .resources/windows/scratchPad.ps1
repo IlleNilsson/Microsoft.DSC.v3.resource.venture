@@ -10,3 +10,25 @@ pwsh -NoLogo -NonInteractive -NoProfile -NoProfileLoadTime -InputFormat Text -Ou
     return ($vars | ConvertTo-Yaml)
 '@ Arg1 Arg2
 
+# adapter:
+#   list:
+#     executable: pwsh
+#     args:
+#       - -NoLogo
+#       - -NonInteractive
+#       - -NoProfile
+#       - -NoProfileLoadTime
+#       - -CommandWithArgs
+#       - |
+#         #Requires -Version 7.5
+#         #Requires -PSEdition Core
+#         #Requires -RunAsAdministrator
+
+#         $platform = [System.Environment]::OSVersion.Platform
+#         $supportedPlatforms = @('Win32NT')
+#         if (!($supportedPlatforms -contains $platform)) {
+#             throw New-Object ArgumentException "Unsupported Platform: $platform, supported platforms: $supportedPlatforms"    
+#         }
+#   config: full
+
+

@@ -2,11 +2,9 @@
 
 ## Feature Resource YAML Schema
 
-## Function for conditonal use of OptionalFeature & Feature in Feature Resource
-
-## Executable in Feature Resource
-
 ## input/output in Feature Resource
+
+## Parameters for resources
 
 ## state in Feature Resource
 
@@ -14,4 +12,4 @@
 
 ## Parameters for different environments
 
-## Parameters for resources
+## Specify exit codes for different errors

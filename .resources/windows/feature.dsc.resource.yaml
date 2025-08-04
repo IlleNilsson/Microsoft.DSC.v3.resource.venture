@@ -1,8 +1,8 @@
 $schema:  https://aka.ms/dsc/schemas/v3/bundled/resource/manifest.vscode.json
-version: 0.1.0
 type: Visity.DSC.Windows/Feature
-kind: resource
+version: 0.1.0
 description: Windows OS Edition agnostic feature handling (WindowsFeature for Server & WindowsOptionalFeature for Clients)
+# kind: resource
 tags:
   - os
   - windows
@@ -42,7 +42,6 @@ get:
       }
 
       return $feature | ConvertTo-Yaml
-
   input: stdin
   return: state
 
@@ -76,7 +75,6 @@ test:
       }
 
       return $feature | ConvertTo-Yaml
-
   input: stdin
   return: state
 
@@ -123,68 +121,64 @@ set:
       }
 
       return $feature | ConvertTo-Yaml
-
   implementsPretest: true
   input: stdin
   return: state
 
-schema:
-  embedded:
-    $id: file://visity.dsc.windows/feature
-    $schema: https://json-schema.org/draft/2020-12/schema
-    type: object
-    title: Windows Feature's status
-    description: Returns information about a Windows Feature's status, is it Enabled or Disabled
+validate:
+  executable: pwsh
+  args:
+    - -NoLogo
+    - -NonInteractive
+    - -NoProfile
+    - -NoProfileLoadTime
+    - -CommandWithArgs
+    - |
+      #Requires -Version 7.5
+      #Requires -PSEdition Core
+      #Requires -RunAsAdministrator
 
-    properties:
-      get:
-        properties:
-          name:
-            type: 
-              $ref: "#/$defs/name"
-        required:
-          - name
+      $platform = [System.Environment]::OSVersion.Platform
+      $supportedPlatforms = @('Win32NT')
+      if (!($supportedPlatforms -contains $platform)) {
+          throw New-Object ArgumentException "Unsupported Platform: $platform, supported platforms: $supportedPlatforms"    
+      }
+  input: stdin
 
-      test:      
-        properties:
-          name:
-            type: 
-              $ref: "#/$defs/name"
-          ensure:
-            type: 
-              $ref: "#/$defs/ensure"
-          
-          required:
-            - name
-            - ensure
+# schema:
+#   embedded:
+#     $schema: https://json-schema.org/draft/2020-12/schema
+#     $id: file://visity.dsc.windows/feature
+#     type: object
+#     title: Windows Feature's status
+#     description: Information about a Windows Feature's status, Enabled or Disabled
 
-      set:      
-        properties:
-          name:
-            type: 
-              $ref: "#/$defs/name"
-          ensure:
-            type: 
-              $ref: "#/$defs/ensure"
+#     properties:
+#       name:
+#         type: 
+#           $ref: #/$defs/name
+#         title: Feature Name
+#         description: The name of the Windows Feature
+#       ensure:
+#         type: 
+#           $ref: #/$defs/ensure
+#         title: Feature Enabled or Disabled
+#         description: Desired Windows Feature state, Enabled or Disabled
 
-          required:
-            - name
-            - ensure
+#     $defs:
+#       name:
+#         type: string
+#         minLength: 1
+#       ensure:
+#         type: string
+#         enum:
+#           - enabled
+#           - disabled
 
-    $defs:
-      name:
-        type: string
-        minLength: 1
-        title: Feature Name
-        description: The name of the Windows Feature
-      ensure:
-        type: string
-        enum:
-          - enabled
-          - disabled
-        title: Feature Enabled or Disabled
-        description: Desired Windows Feature state, Enabled or Disabled
-      
+#     required:
+#       - name
+#       - ensure
+
 exitCodes:
   0: success
   1: failure

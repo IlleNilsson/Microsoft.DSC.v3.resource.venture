@@ -2,6 +2,17 @@
 #Requires -PSEdition Core
 #Requires -RunAsAdministrator
 
+[CmdletBinding()]
+param(
+    [parameter(position = 0, mandatory = $true)]
+    [validateNotNullOrWhiteSpace()]
+    [string]$name,
+
+    [parameter(position = 1, mandatory = $true)]
+    [validateSet('enabled', 'disabled')]
+    [string]$ensure
+)
+
 $platform = [System.Environment]::OSVersion.Platform
 $supportedPlatforms = @('Win32NT')
 if (!($supportedPlatforms -contains $platform)) {
