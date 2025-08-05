@@ -20,26 +20,23 @@ if (!($supportedPlatforms -contains $platform)) {
 }
 
 $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
-$feature = switch ($args['ensure']) {
+$feature = switch ($ensure) {
     'enabled' {
         switch ($osType) {
-            1       { Enable-WindowsOptionalFeature -Online -FeatureName $args['name'] -EA Silent }
-            default { Enable-WindowsFeature -Name $args['name'] -EA Silent }
+            1       { Enable-WindowsOptionalFeature -Online -FeatureName $name -EA Silent }
+            default { Enable-WindowsFeature -Name $name -EA Silent }
         }
     }
     'disabled' { 
         switch ($osType) {
-            1       { Disable-WindowsOptionalFeature -Online -FeatureName $args['name'] -EA Silent }
-            default { Disable-WindowsFeature -Name $args['name'] -EA Silent }  
+            1       { Disable-WindowsOptionalFeature -Online -FeatureName $name -EA Silent }
+            default { Disable-WindowsFeature -Name $name -EA Silent }  
         }
-    }
-    default {
-        throw New-Object ArgumentException "Ensure value '$($args['ensure'])' is not supported"    
     }
 }
 
 if (!$feature) { 
-    throw New-Object ArgumentException "Feature '$($args['name'])' not found on Windows OS Type: $osType"
+    throw New-Object ArgumentException "Feature '$name' not found on Windows OS Type: $osType"
 }
 
 return $feature | ConvertTo-Yaml

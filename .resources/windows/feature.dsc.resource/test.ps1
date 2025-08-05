@@ -21,12 +21,12 @@ if (!($supportedPlatforms -contains $platform)) {
 
 $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
 $feature = switch ($osType) {
-    1       { Get-WindowsOptionalFeature -Online -FeatureName $args['name'] }
-    default { Get-WindowsFeature -Name $args['name'] }  
+    1       { Get-WindowsOptionalFeature -Online -FeatureName $name }
+    default { Get-WindowsFeature -Name $name }  
 }
 
 if (!$feature) { 
-    throw New-Object ArgumentException "Feature '$($args['name'])' not found on Windows OS Type: $osType"
+    throw New-Object ArgumentException "Feature '$name' not found on Windows OS Type: $osType"
 }
 
 return $feature | ConvertTo-Yaml
