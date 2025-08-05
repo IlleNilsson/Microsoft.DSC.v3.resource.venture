@@ -2,11 +2,10 @@ $schema: https://aka.ms/dsc/schemas/v3/bundled/config/document.vscode.json
 
 resources:
   - name: HyperV Feature
-    type: Microsoft.DSC/Include
+    type: Visity.DSC.Windows/Feature
     properties:
-      path: ./.resources/windows/feature.dsc.resource.yaml       
       name: Microsoft-Hyper-V
-      ensure: enabled 
+      ensure: enabled
   
   - name: Visity
     type: Microsoft.Windows/WindowsPowerShell
