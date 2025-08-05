@@ -1,4 +1,4 @@
-$schema:  https://aka.ms/dsc/schemas/v3/bundled/resource/manifest.vscode.json
+$schema: https://aka.ms/dsc/schemas/v3/bundled/resource/manifest.vscode.json
 type: Visity.DSC.Windows/Feature
 version: 0.1.0
 description: Windows OS Edition agnostic feature handling (WindowsFeature for Server & WindowsOptionalFeature for Clients)
