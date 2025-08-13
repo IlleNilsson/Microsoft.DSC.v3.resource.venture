@@ -25,8 +25,11 @@ if (!$feature) {
     throw New-Object ArgumentException "Feature '$name' not found on Windows OS Type: $osType"
 }
 
-return $feature | select
-    @{ Name = 'name';               Expression = { $_.FeatureName } },
-    @{ Name = 'ensure';             Expression = { $_.State } }, 
-    @{ Name = 'restartNeeded';      Expression = { $_.RestartNeeded } },
-    @{ Name = 'restartRequired';    Expression = { $_.RestartRequired } } | ConvertTo-Yaml
+$featureProperties = @( 
+    @{ Name = 'name';            Expression = { $_.FeatureName } },
+    @{ Name = 'ensure';          Expression = { "$($_.State)".ToLower() } }, 
+    @{ Name = 'restartNeeded';   Expression = { $_.RestartNeeded } },
+    @{ Name = 'restartRequired'; Expression = { "$($_.RestartRequired)".ToLower() } }
+)
+
+$feature | Select-Object $featureProperties | ConvertTo-Yaml
