@@ -18,7 +18,6 @@ function Request-FeatureState {
     [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'Set')]
     [switch]$Set,
 
-    [Parameter(ParameterSetName = 'Validate')]
     [Parameter(ParameterSetName = 'Get')]
     [Parameter(ParameterSetName = 'Test')]
     [Parameter(ParameterSetName = 'Set')]
