@@ -18,7 +18,7 @@ function Request-FeatureState {
     [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'Set')]
     [switch]$Set,
 
-    [Parameter(ParameterSetName = 'Validate', DontShow)]
+    [Parameter(ParameterSetName = 'Validate')]
     [Parameter(ParameterSetName = 'Get')]
     [Parameter(ParameterSetName = 'Test')]
     [Parameter(ParameterSetName = 'Set')]
@@ -106,7 +106,6 @@ function Test-Feature {
   )
 
   $feature = Get-Feature -OSType $OSType -Name $Name
-
   if ($feature.State -eq $Ensure) {
     'Fine'
   } else {
@@ -125,6 +124,7 @@ function Set-Feature {
 
     [Parameter(Position = 2, Mandatory = $true)]
     [ValidateSet('Enabled', 'Disabled')]
+    [ValidateNotNullOrWhiteSpace()]
     [string]$Ensure
   )
 
