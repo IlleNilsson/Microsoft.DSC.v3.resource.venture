@@ -21,7 +21,7 @@ validate:
     - -NoProfile
     - -NoProfileLoadTime
     - -WindowStyle Hidden
-    - -CommandWithArgs Request-Feaure -Validate
+    - -CommandWithArgs Request-FeatureState -Validate
   input: stdin
 
 get:
@@ -33,7 +33,7 @@ get:
     - -NoProfile
     - -NoProfileLoadTime
     - -WindowStyle Hidden
-    - -CommandWithArgs Request-Feaure -Get -Name 'Microsoft-Hyper-V'
+    - -CommandWithArgs Request-FeatureState -Get -Name 'Microsoft-Hyper-V'
   input: stdin
   return: state
 
@@ -46,7 +46,7 @@ test:
     - -NoProfile
     - -NoProfileLoadTime
     - -WindowStyle Hidden
-    - -CommandWithArgs Request-Feaure -Test -Name 'Microsoft-Hyper-V' -Ensure Enabled
+    - -CommandWithArgs Request-FeatureState -Test -Name 'Microsoft-Hyper-V' -Ensure Enabled
   input: stdin
   return: state
 
@@ -59,7 +59,7 @@ set:
     - -NoProfile
     - -NoProfileLoadTime
     - -WindowStyle Hidden
-    - -CommandWithArgs Request-Feaure -Set -Name 'Microsoft-Hyper-V' -Ensure Enabled
+    - -CommandWithArgs Request-FeatureState -Set -Name 'Microsoft-Hyper-V' -Ensure Enabled
   implementsPretest: true
   input: stdin
   return: state
@@ -99,5 +99,8 @@ set:
 #       - ensure
 
 exitCodes:
-  0: success
-  1: failure
+  0: Success
+  1: Failure
+  2: Unsupported Platform
+  3: Feature not found
+  4: Invalid Ensure type

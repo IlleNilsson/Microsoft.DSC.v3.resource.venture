@@ -1,8 +1,9 @@
 #Requires -Version 7.5
 #Requires -PSEdition Core
 #Requires -RunAsAdministrator
+$ErrorActionPreference = 'Stop'
 
-function Request-Feature {
+function Request-FeatureState {
   [CmdletBinding()]
   param(
     [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'Validate')]
@@ -17,11 +18,20 @@ function Request-Feature {
     [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'Set')]
     [switch]$Set,
 
-    [Parameter(Position = 1, Mandatory = $true, ParameterSetName = 'Get', 'Test', 'Set')]
+    [Parameter(ParameterSetName = 'Validate', DontShow)]
+    [Parameter(ParameterSetName = 'Get')]
+    [Parameter(ParameterSetName = 'Test')]
+    [Parameter(ParameterSetName = 'Set')]
+    [Parameter(Position = 1, Mandatory = $true)]
     [ValidateNotNullOrWhiteSpace()]
     [string]$Name,
 
-    [Parameter(Position = 2, Mandatory = $true, ParameterSetName = 'Test', 'Set')]
+    [Parameter(ParameterSetName = 'Validate', DontShow)]
+    [Parameter(ParameterSetName = 'Get', DontShow)]
+    [Parameter(ParameterSetName = 'Test')]
+    [Parameter(ParameterSetName = 'Set')]
+    [Parameter(Position = 2)]
+    [ValidateNotNullOrWhiteSpace()]
     [ValidateSet('Enabled', 'Disabled')]
     [string]$Ensure
   )
@@ -29,19 +39,24 @@ function Request-Feature {
   $supportedPlatforms = @('Win32NT')
   $platform = [System.Environment]::OSVersion.Platform
   if (!($supportedPlatforms -contains $platform)) {
-    throw New-Object ArgumentException "Unsupported Platform: $platform, supported platforms: $supportedPlatforms"    
+    $exceptionMessage = "Unsupported Platform: $platform, supported platforms: $supportedPlatforms"
+    exit 2; throw New-Object ArgumentException $exceptionMessage    
   }
 
   $osType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
-  $feature = switch ($parameterSetName) {
-    'Validate' { Test-Instance }
-    'Get' { Get-Feature -OSType $osType -Name $Name }
-    'Test' { Test-Feature -OSType $osType -Name $Name -Ensure $Ensure }
-    'Set' { Set-Feature -OSType $osType -Name $Name -Ensure $Ensure }
+  $feature = switch ($PsCmdlet.ParameterSetName) {
+    'Validate' 
+      { Test-Instance }
+    'Get' 
+      { Get-Feature -OSType $osType -Name $Name }
+    'Test' 
+      { Test-Feature -OSType $osType -Name $Name -Ensure $Ensure }
+    'Set' 
+      { Set-Feature -OSType $osType -Name $Name -Ensure $Ensure }
   }
 
   if (!$feature) { 
-    throw New-Object ArgumentException "Feature '$Name' not found on Windows OS Type: $(
+    exit 3; throw New-Object ArgumentException "Feature '$Name' not found on Windows OS Type: $(
       switch($osType) { 1 { 'Client' } default { 'Server' } } )"
   }
 
@@ -52,7 +67,7 @@ function Request-Feature {
     @{ Name = 'restartRequired'; Expression = { "$($_.RestartRequired)".ToLower() } }
   )
 
-  Select-Object $featureProperties | ConvertTo-Yaml
+  $feature | Select-Object $featureProperties | ConvertTo-Yaml
 }
 
 function Test-Instance { 
@@ -85,6 +100,7 @@ function Test-Feature {
     [string]$Name,
 
     [Parameter(Position = 2, Mandatory = $true)]
+    [ValidateNotNullOrWhiteSpace()]
     [ValidateSet('Enabled', 'Disabled')]
     [string]$Ensure
   )
@@ -93,8 +109,7 @@ function Test-Feature {
 
   if ($feature.State -eq $Ensure) {
     'Fine'
-  }
-  else {
+  } else {
     'NotFine'
   }
 }
@@ -127,7 +142,7 @@ function Set-Feature {
       }
     }
     default {
-      throw New-Object ArgumentException "Invalid Ensure type: $Ensure"  
+      exit 4; throw New-Object ArgumentException "Invalid Ensure type: $Ensure"  
     }
   }
 }

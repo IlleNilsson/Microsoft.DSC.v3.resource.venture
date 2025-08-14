@@ -6,7 +6,7 @@
 
 ## Parameters for resources
 
-## state in Feature Resource
+## state in Resource
 
 ## Include Feature Resource in config document
 
