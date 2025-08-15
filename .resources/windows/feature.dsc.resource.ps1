@@ -70,11 +70,8 @@ function Request-FeatureState {
   $feature | Select-Object $featureProperties | ConvertTo-Yaml
 }
 
-function Test-Instance { 
-  throw New-Object NotImplementedException 'Test-Instance'
-}
-
 function Get-Feature {
+  [CmdletBinding()]
   param(
     [Parameter(Position = 0, Mandatory = $true)]
     [int]$OSType,
@@ -90,7 +87,15 @@ function Get-Feature {
   }
 }
 
+function Test-Instance {
+  [CmdletBinding()]
+  param() 
+
+  throw New-Object NotImplementedException 'Test-Instance'
+}
+
 function Test-Feature {
+  [CmdletBinding()]
   param( 
     [Parameter(Position = 0, Mandatory = $true)]
     [int]$OSType,
@@ -114,6 +119,7 @@ function Test-Feature {
 }
 
 function Set-Feature { 
+  [CmdletBinding()]
   param( 
     [Parameter(Position = 0, Mandatory = $true)]
     [int]$OSType,
@@ -127,7 +133,7 @@ function Set-Feature {
     [ValidateNotNullOrWhiteSpace()]
     [string]$Ensure
   )
-
+  
   switch ($Ensure) {
     'Enabled' {
       switch ($OSType) {
